@@ -6,7 +6,8 @@
 // import './6.abstract'
 // import './7.class&interface'
 // import './8.generics'
-import './9.advanced'
+// import './9.advanced'
+import './10.other-types'
 
 let hello: string = 'Hello TypeScript'
 
