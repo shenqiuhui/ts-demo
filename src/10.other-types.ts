@@ -131,4 +131,80 @@ console.log(getValues(obj, ['a', 'b']))
 // console.log(getValues(obj, ['e', 'f'])) // 正常报错
 
 // 五、映射类型
+interface Obj2 {
+  a: string
+  b: number
+  c: boolean
+}
 
+// 1、接口所有成员都变为只读
+type ReadonlyObj = Readonly<Obj2>
+
+// 实现原理
+type ReadonlyCopy<T> = {
+  // P 代表对象的一个属性
+  // keyof T 所有属性的联合类型
+  // T[p] P 属性的类型
+  readonly [P in keyof T]: T[P]
+}
+
+// 2、接口所有属性都变为可选
+type PartialObj = Partial<Obj2>
+
+// 原理
+type PartialCopy<T> = {
+  [P in keyof T]?: T[P]
+}
+
+// 3、抽取子集
+type PickObj = Pick<Obj2, 'a' | 'b'>
+
+// 原理
+type PickCopy<T, K extends keyof T> = {
+  // K 必须是 T 所有属性组成联合类型的子集
+  // P 必须在 K 中，且被在 T 中对应的真实类型约束
+  [P in K]: T[P]
+}
+
+// 4、Record
+type RecordObj = Record<'x' | 'y', Obj2>
+
+// 原理
+type RecordCopy<K extends keyof any, T> = {
+  [P in K]: T;
+};
+
+// 六、条件类型
+// T extends U ? X : Y
+type TypeName<T> = T extends string ? 'string' :
+  T extends number ? 'number' :
+  T extends boolean ? 'boolean' :
+  T extends undefined ? 'undefined' :
+  T extends Function ? 'function' :
+  'object'
+
+type T1 = TypeName<string> // type T1 = "string"
+type T2 = TypeName<string[]> // type T2 = "object"
+
+// (A | B) extends U ? X : Y
+// (A extends U ? X : Y) | (B extends U ? X : Y)
+
+type T3 = TypeName<string | string[]> // type T3 = "string" | "object"
+
+// Exclude
+type Diff<T, U> = T extends U ? never : T
+
+type T4 = Diff<'a' | 'b' | 'c', 'a' | 'e'>
+// 拆解为 Diff<'a', 'a' | 'e'> | Diff<'b', 'a' | 'e'> | Diff<'c', 'a' | 'e'>
+// never | 'b' | 'c' => 'b' | 'c'
+
+// NonNullable
+type NotNull<T> = Diff<T, undefined | null>
+type T5 = NotNull<string | number | undefined | null> // type T5 = string | number
+
+type T6 = Extract<'a' | 'b' | 'c', 'a' | 'e'> // type T6 = "a"
+
+type T7 = ReturnType<() => string> // type T7 = string
+
+// 原理，infer 代表延迟推断，如果传入函数的实际返回值类型存在就直接返回，否则返回 any 类型
+type ReturnTypeCopy<T extends (...args: any) => any> = T extends (...args: any) => infer R ? R : any;
