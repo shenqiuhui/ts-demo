@@ -1,4 +1,4 @@
-namespace Shape {
+namespace ShapeH {
   // 命名空间中声明的变量只在命名空间中可见
   const pi = Math.PI
 

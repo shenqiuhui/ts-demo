@@ -4,7 +4,7 @@ let c3 = require('../es6/a')
 
 // 兼容语法的两种导入方式
 // import c4 = require('../es6/d')
-import c4 from '../es6/d' // 需要 esModuleInterop 配置项开启（默认为开启状态）
+import c4 from '../1.es6/d' // 需要 esModuleInterop 配置项开启（默认为开启状态）
 
 console.log(c1)
 console.log(c2)

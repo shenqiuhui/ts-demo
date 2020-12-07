@@ -1,18 +1,22 @@
 // 基础
-// import './basics/1.datatype'
-// import './basics/2.enum'
-// import './basics/3.interface'
-// import './basics/4.function'
-// import './basics/5.class'
-// import './basics/6.abstract'
-// import './basics/7.class&interface'
-// import './basics/8.generics'
-// import './basics/9.advanced'
-// import './basics/10.other-types'
+// import './1.basics/1.datatype'
+// import './1.basics/2.enum'
+// import './1.basics/3.interface'
+// import './1.basics/4.function'
+// import './1.basics/5.class'
+// import './1.basics/6.abstract'
+// import './1.basics/7.class&interface'
+// import './1.basics/8.generics'
+// import './1.basics/9.advanced'
+// import './1.basics/10.other-types'
 
 // 模块化
-// import './modules/es6/c'
-import './modules/node/c.node'
+// import './2.modules/1.es6/c'
+// import './2.modules/2.node/c.node'
+
+// 声明合并
+// import './3.merge/1.interface-merge'
+import './3.merge/2.namespace-merge'
 
 let hello: string = 'Hello TypeScript'
 
