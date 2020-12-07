@@ -16,7 +16,10 @@
 
 // 声明合并
 // import './3.merge/1.interface-merge'
-import './3.merge/2.namespace-merge'
+// import './3.merge/2.namespace-merge'
+
+// 编写声明文件
+import './4.libs/1.use-lib'
 
 let hello: string = 'Hello TypeScript'
 

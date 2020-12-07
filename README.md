@@ -48,6 +48,6 @@ X 兼容 Y：X（目标类型）= Y（源类型）
 兼容：`ESModule` 允许文件存在一个顶级的默认导出，和其他次级导出，`Commonjs` 只允许一个顶级导出，所以在模块代码编译转换是会进行兼容
 
 - 如果导入导出都使用 `ESModule` 编译成 `Commonjs` 导出和调用都会默认加上 `default` 属性，对使用者来讲无感知
-- 如果使用 `ESModule` 的方式导出，用非 `ESModule` 的方式导入，默认认知就会有问题，比如需要手动调用 `default` 使用默认导入。
+- 如果使用 `ESModule` 的方式导出，用非 `ESModule` 的方式导入，默认值就会有问题，比如需要手动调用 `default` 使用默认导入。
 
-兼容性处理见 `src/modules/es6/d.ts` 和 `src/modules/node/c.node.ts`
+兼容性处理见 `src/2.modules/1.es6/d.ts` 和 `src/2.modules/2.node/c.node.ts`
