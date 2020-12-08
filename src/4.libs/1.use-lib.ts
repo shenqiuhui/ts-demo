@@ -7,21 +7,43 @@ import $ from 'jquery'
 
 $('.app').css('color', 'red')
 
-// 全局模块用法
+// 一、全局模块用法
 globalLib({x: 1})
 globalLib.doSomething()
 console.log(globalLib.version)
 
-// commonjs 模块
+// 二、commonjs 模块
 import moduleLib from './3.module-lib'
 moduleLib({x: 1})
 moduleLib.doSomething()
 console.log(moduleLib.version)
 
-// umd 模块
+// 三、umd 模块
 import umdLib from './4.umd-lib'
 
 // 也可以通过全局方式（script）引用，会提示警告，不建议全局引用，可通过 allowUmdGlobalAccess 选项设置
 
 console.log(umdLib.version)
 umdLib.doSomething()
+
+// 四、模块插件/全局插件
+import moment from 'moment'
+
+// 给模块定义扩展的声明
+declare module 'moment' {
+  export function myFunction(): void
+}
+moment.myFunction = () => {}
+
+// 给全局模块定义扩展的声明
+declare global {
+  namespace globalLib {
+    function doAnything(): void
+  }
+}
+
+globalLib.doAnything = () => {}
+
+// 五、声明文件的依赖
+// 在比较大的类库声明文件通常会按照一定的模块划分，不会都写在同一个文件中
+// @types/xxx 的 package.json 中，types 字段代表声明文件的入口如：index.d.ts，详见 ./index.d.ts
