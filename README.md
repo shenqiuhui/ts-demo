@@ -51,3 +51,76 @@ X 兼容 Y：X（目标类型）= Y（源类型）
 - 如果使用 `ESModule` 的方式导出，用非 `ESModule` 的方式导入，默认值就会有问题，比如需要手动调用 `default` 使用默认导入。
 
 兼容性处理见 `src/2.modules/1.es6/d.ts` 和 `src/2.modules/2.node/c.node.ts`
+
+# tsconfig 配置文件
+
+## 文件相关
+
+- `files`：编译器需要编译的文件列表
+- `include`：编译文件夹下的文件
+- `exclude`：排除的文件夹，默认会排除 `node_modules` 和所有的声明文件
+
+```json
+{
+  "files": [
+    "src/a.ts"
+  ],
+  "include": [
+    "src/*"
+  ],
+  "exclude": [
+    "src/lib"
+  ]
+}
+```
+
+**`files`、`include`、`exclude` 会组合共同起作用。**
+
+
+- `extends`：继承其他配置文件的配置
+
+```json
+{
+  "extends": "./tsconfig.base.json"
+}
+```
+
+**配置文件中可以覆盖已继承的配置。**
+
+## compilerOptions 编译相关
+
+- `incremental`：增量编译，第一次编译后会生成编译信息的文件 `tsconfig.tsbuildinfo`，之后只做增量的编译，增加编译速度
+- `tsBuildInfoFile`：自定义编译信息文件的存放位置
+- `diagnostics`：打印编译的时间和信息
+
+```json
+{
+  "incremental": true,
+  "tsBuildInfoFile"："./buildFile",
+  "diagnostics": true
+}
+```
+
+- `target`：目标语言的版本，`es3`、`es5`、`es2015`、`ESNext`
+- `module`：编译的模块化规范，`none`、`commonjs`、`amd`、`system`、`umd`、`es2015`、`es2020`、`ESNext`
+- `outFile`：将多个相互依赖的文件生成一个文件，可用在 `AMD` 模块中
+
+```json
+{
+  "compilerOptions": {
+    "module": "amd",
+    "outFile": "./app.js"
+  }
+}
+```
+
+- `lib`：需要导入的类库，和 `target` 配合使用，`target` 为 `es5`，默认导入 `dom`、`es5`、`scripthost`
+
+```json
+{
+  "compilerOptions": {
+    "target": "es5",
+    "lib": ["dom", "es5", "scripthost"]
+  }
+}
+```
