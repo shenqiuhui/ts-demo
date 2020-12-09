@@ -96,7 +96,7 @@ X 兼容 Y：X（目标类型）= Y（源类型）
 ```json
 {
   "incremental": true,
-  "tsBuildInfoFile"："./buildFile",
+  "tsBuildInfoFile": "./buildFile",
   "diagnostics": true
 }
 ```
