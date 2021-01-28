@@ -1,4 +1,4 @@
-// 一、交叉类型，去类型的并集
+// 一、交叉类型，取类型的并集
 interface DogInterface {
   run(): void
 }
@@ -71,7 +71,7 @@ interface Circle {
 // 当新增类型没有保护区块时不会报错，如果需要约束有两种方式
 type Shape = Square | Rectangle | Circle
 
-// 方式一：函数返回值
+// 方式一：函数增加返回值约束
 // function area(s: Shape): number {
 //   switch (s.kind) {
 //     case 'square':
@@ -89,7 +89,7 @@ function area(s: Shape) {
     case 'rectangle':
       return s.height * s.width
     default:
-      // 如果 s 是 never 类型永远不会执行 default 分支，说明上面分支被覆盖到，如果不是 nerver 类型说明上面有遗漏分支
+      // 如果 s 是 never 类型永远不会执行 default 分支，说明上面分支被覆盖到，如果不是 never 类型说明上面有遗漏分支
       // return ((e: never) => { throw new Error(e) })(s) // 报错
   }
 }
@@ -103,7 +103,7 @@ let obj = {
   c: 3
 }
 
-// function getValues(obj: any, keys: string[]) {
+// function getValues(obj: unknown, keys: string[]) {
 //   return keys.map(key => obj[key])
 // }
 
@@ -121,7 +121,7 @@ let key: keyof Obj // 等同于 let key: "a" | "b"
 // T[K] 索引访问操作符，表示对象 T 的属性 K 所代表的的类型
 let value: Obj['a'] // 等同于 let value: number
 
-// T extends U，泛型可以通过继承某个约束获取某些属性
+// T extends U，泛型 T 必须是泛型 U 的子集
 
 function getValues<T, K extends keyof T>(obj: T, keys: K[]): T[K][] {
   return keys.map(key => obj[key])
