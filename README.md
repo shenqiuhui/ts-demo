@@ -31,7 +31,7 @@ X 兼容 Y：X（目标类型）= Y（源类型）
 
 **类型保护：**
 
-`TypeScript` 能够在特定的区块中保证变量属于某中确定的类型，可以在此区块中放心的引用此类型的属性或者调用此类型的方法。
+`TypeScript` 能够在特定的区块中保证变量属于某种确定的类型，可以在此区块中放心的引用此类型的属性或者调用此类型的方法。
 
 # 模块化
 
@@ -121,6 +121,118 @@ X 兼容 Y：X（目标类型）= Y（源类型）
   "compilerOptions": {
     "target": "es5",
     "lib": ["dom", "es5", "scripthost"]
+  }
+}
+```
+
+- `allowJs`: 允许编译 `js`、 `jsx` 文件
+- `checkJs`: 允许在 `jsx` 文件中报错，通常和 `allowJs` 一起使用
+- `outDir`: 指定输出目录，防止编译后的 `js` 文件覆盖原文件
+- `rootDir`: 指定输入目录，用于输出
+
+```json
+{
+  "include": [
+    "src"
+  ],
+  "compilerOptions": {
+    "allowJs": true,
+    "checkJs": true,
+    "outDir": "./out",
+    "rootDir": "./src"
+  }
+}
+```
+
+- `declaration`: 生成声明文件
+- `declarationDir`: 生成声明文件的路径
+- `emitDeclarationOnly`: 只生成声明文件
+
+
+```json
+{
+  "compilerOptions": {
+    "declaration": true,
+    "declarationDir": "./d",
+    "emitDeclarationOnly": true
+  }
+}
+```
+
+- `sourceMap`: 生成目标文件的 `sourceMap`
+- `inlineSourceMap`: 生成目标文件的 `inlineSourceMap`，会包含在生成的 `js` 文件之中
+- `declarationMap`: 为声明文件生成 `sourceMap`
+
+```json
+{
+  "compilerOptions": {
+    "sourceMap": true,
+  }
+}
+```
+
+```json
+{
+  "compilerOptions": {
+    "inlineSourceMap": true,
+  }
+}
+```
+
+```json
+{
+  "compilerOptions": {
+    "declaration": true,
+    "declarationMap": true
+  }
+}
+```
+
+- `typeRoots`: 声明文件目录，默认查找 `node_modules/@types`
+- `types`: 指定要加载的声明文件包
+
+
+```json
+{
+  "compilerOptions": {
+    "typeRoots": [],
+    "types": []
+  }
+}
+```
+
+- `removeComments`: 删除注释
+
+```json
+{
+  "compilerOptions": {
+    "removeComments": true
+  }
+}
+```
+
+- `onEmit`: 不输出任何文件，相当于什么也没有做
+- `onEmitOnError`: 当发生错误的时候不输出任何文件
+- `onEmitHelpers`: 不生成 `helper` 函数，减少代码编译后的体积，如类的继承代码，需要安装 `ts-helpers`，否则编译产出结果出现未定义函数
+- `importHelpers`: 用于替换 `onEmitHelpers` 配置，通过 `tslib` 内置库引入 `helper` 函数，文件必须是模块
+
+```json
+{
+  "compilerOptions": {
+    "onEmit": true,
+    "onEmitOnError": true,
+    "onEmitHelpers": true,
+    "importHelpers": true
+  }
+}
+```
+
+- `downlevelIteration`: 在 `es3/5` 中降级遍历器的实现，开启后使用 `helper` 函数实现
+
+```json
+{
+  "compilerOptions": {
+    "downlevelIteration": true
   }
 }
 ```
