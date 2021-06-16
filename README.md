@@ -87,7 +87,7 @@ X 兼容 Y：X（目标类型）= Y（源类型）
 
 **配置文件中可以覆盖已继承的配置。**
 
-## compilerOptions 编译相关
+## 编译相关
 
 - `incremental`：增量编译，第一次编译后会生成编译信息的文件 `tsconfig.tsbuildinfo`，之后只做增量的编译，增加编译速度
 - `tsBuildInfoFile`：自定义编译信息文件的存放位置
@@ -95,9 +95,11 @@ X 兼容 Y：X（目标类型）= Y（源类型）
 
 ```json
 {
-  "incremental": true,
-  "tsBuildInfoFile": "./buildFile",
-  "diagnostics": true
+  "compilerOptions": {
+    "incremental": true,
+    "tsBuildInfoFile": "./buildFile",
+    "diagnostics": true
+  }
 }
 ```
 
@@ -236,3 +238,212 @@ X 兼容 Y：X（目标类型）= Y（源类型）
   }
 }
 ```
+
+- `strict`: 开启所有严格的类型检查，开启后其他严格检查类型的选项默认都为 `true`
+- `alwaysStrict`: 默认在代码中注入 `use strict` 严格检查声明
+- `noImplicitAny`: 不允许隐式的 `any` 类型
+- `strictNullChecks`: 不允许把 `null` 和 `undefined` 赋值给其他类型的变量
+- `strictFunctionTypes`: 不允许函数参数的双向协变
+- `strictPropertyInitialization`: 保证累的实例必须要初始化
+- `strictBindCallApply`: 保证执行严格的 `bind/call/apply` 检查
+- `noImplicitThis`: 不允许 `this` 有隐式的 `any` 类型
+
+```json
+{
+  "compilerOptions": {
+    "strict": true,
+    "alwaysStrict": true,
+    "noImplicitAny": true,
+    "strictNullChecks": true,
+    "strictFunctionTypes": true,
+    "strictPropertyInitialization": true,
+    "strictBindCallApply": true,
+    "noImplicitThis": true
+  }
+}
+```
+
+- `noUnusedLocals`: 不允许出现之生命不使用的变量
+- `noUnusedParameters`: 检查函数中没有使用的参数
+- `noFallthroughCasesInSwitch`: 防止 `switch` 语句贯穿，即不允许分支不存在 `break` 或 `return`
+- `noImplicitReturns`: 保证程序的每一个分支都要有返回值
+
+```json
+{
+  "compilerOptions": {
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noFallthroughCasesInSwitch": true,
+    "noImplicitReturns": true
+  }
+}
+```
+
+- `esModuleInterop`: 允许使用 `export=` 的方式导出，由 `import from` 引入
+- `allowUmdGlobalAccess`: 允许使用全局变量的方式访问一个 `UMD` 模块
+- `moduleResolution`: 模块解析策略 `classic` 和 `node`
+
+```json
+{
+  "compilerOptions": {
+    "esModuleInterop": true,
+    "allowUmdGlobalAccess": true,
+    "moduleResolution": true
+  }
+}
+```
+
+**classic**
+
+相对导入：
+
+```js
+import { b } from './moduleB';
+
+// /root/src/moduleB.ts
+// /root/src/moduleB.d.ts
+```
+
+绝对导入：
+
+```js
+import { b } from 'moduleB';
+
+// /root/src/node_modules/moduleB.ts
+// /root/src/node_modules/moduleB.d.ts
+
+// /root/node_modules/moduleB.ts
+// /root/node_modules/moduleB.d.ts
+
+// /node_modules/moduleB.ts
+// /node_modules/moduleB.d.ts
+```
+
+**node**
+
+相对导入：
+
+```js
+import { b } from './moduleB';
+
+// /root/src/moduleB.ts
+// /root/src/moduleB.tsx
+// /root/src/moduleB.d.ts
+// /root/src/moduleB/package.json （types 属性）
+// /root/src/moduleB/index.ts
+// /root/src/moduleB/index.tsx
+// /root/src/moduleB/index.d.ts
+```
+
+绝对导入：
+
+```js
+import { b } from 'moduleB';
+
+// /root/src/node_modules/moduleB.ts
+// /root/src/node_modules/moduleB.tsx
+// /root/src/node_modules/moduleB.d.ts
+// /root/src/node_modules/moduleB/package.json （types 属性）
+// /root/src/node_modules/moduleB/index.ts
+// /root/src/node_modules/moduleB/index.tsx
+// /root/src/node_modules/moduleB/index.d.ts
+
+// /root/node_modules/moduleB.ts
+// /root/node_modules/moduleB.tsx
+// /root/node_modules/moduleB.d.ts
+// /root/node_modules/moduleB/package.json （types 属性）
+// /root/node_modules/moduleB/index.ts
+// /root/node_modules/moduleB/index.tsx
+// /root/node_modules/moduleB/index.d.ts
+
+// /node_modules/moduleB.ts
+// /node_modules/moduleB.tsx
+// /node_modules/moduleB.d.ts
+// /node_modules/moduleB/package.json （types 属性）
+// /node_modules/moduleB/index.ts
+// /node_modules/moduleB/index.tsx
+// /node_modules/moduleB/index.d.ts
+```
+
+- `baseUrl`: 解析非相对导入模块的基地址，默认 `./`，即为当前目录
+- `paths`: 路径映射，相对于 `baseUrl`
+- `rootDirs`: 将多个目录放在一个虚拟目录，可以按照虚拟目录的引用关系进行引入，用于运行时
+
+```json
+{
+  "compilerOptions": {
+    "paths": {
+      "jquery": ["node_modules/jquery/dist/jquery.slim.min.js"]
+    },
+    "rootDirs": ["src", "out"]
+  }
+}
+```
+
+- `listEmittedFiles`: 打印输出文件
+- `listFiles`: 打印输出文件，包含引用的声明文件
+
+```json
+{
+  "compilerOptions": {
+    "listEmittedFiles": true,
+    "listFiles": true
+  }
+}
+```
+
+## 工程引用
+
+```json
+{
+  "compilerOptions": {
+    "target": "es5",
+    "module": "commonjs",
+    "strict": true,
+    "outDir": "./dist"
+  },
+  "include": ["src"]
+}
+```
+
+使用场景：假如服务端和客户端的代码在一个工程中，想要剔除 `src` 目录层级，并且不想把测试用例构建在产出目录中，或者想要单独构建某一部分应用，则通过上面这样的单个配置文件无法解决。
+
+工程引用就是用来解决这一类问题的，可以灵活配置输出目录，还可以使工程之间产生依赖关系，有利于把一个大的项目拆成多个小的项目，也可以配合增量编译提高编译速度。
+
+**基础配置：**
+
+- `composite`: 工程可以被引用，并可以进行增量编译，工程引用必须配置生成声明文件
+
+```json
+{
+  "compilerOptions": {
+    "target": "es5",
+    "module": "commonjs",
+    "strict": true,
+    "composite": true,
+    "declaration": true
+  }
+}
+```
+
+**具体工程配置：**
+
+- `references`: 依赖的工程
+
+```json
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "outDir": "../../dist/client"
+  },
+  "references": [
+    {
+      "path": "../common"
+    }
+  ]
+}
+```
+
+可以使用如下命令构建具体的某一个工程，`--build` 是构建具体工程的参数，`--verbose` 用来打印构建信息。
+
+> tsc --build src/sever --verbose
