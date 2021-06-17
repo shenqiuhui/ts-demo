@@ -447,3 +447,112 @@ import { b } from 'moduleB';
 可以使用如下命令构建具体的某一个工程，`--build` 是构建具体工程的参数，`--verbose` 用来打印构建信息。
 
 > tsc --build src/sever --verbose
+
+# 构建工具
+
+## ts-loader 和 awesome-typescript-loader
+
+`awesome-typescript-loader` 与 `ts-loader` 的主要区别：
+
+- 更适合与 `Babel` 集成，使用 `Babel` 的转义和缓存
+- 不需要安装额外的插件，就可以将类型检查放在单独的进程中进行
+- `ts-loader` 使用单独的进程进行类型检查编译耗时较长，`awesome-typescript-loader` 类型检查插件存在类型检查遗漏
+
+## tsc 和 babel
+
+- `tsc` 默认存在类型检查，不存在插件
+- `babel` 无类型检查能力，插件非常丰富
+
+`Babel7` 之前不支持 `TS`：
+
+`TS` -> `tsc/ts-loader/awesome-typescript-loader` -> `JS` -> `Babel` - `JS`
+
+`Babel7` 之后：
+
+`TS` -> `Babel` -> `JS`
+
+`babel` 中无法编译的语法：
+
+- `namespace` 命名空间
+- `<>` 类型断言
+- `const enum` 常量枚举
+- `export=` 导出方式
+
+## 如何选择编译工具
+
+- 没有使用过 `Babel`，首选 `typescript` 自身的编译器（可配合 `ts-loader` 使用）
+- 如果项目中已经使用了 `Babel`，安装 `@babel/preset-typescript`（可配合 `tsc` 监听模式做类型检查）
+- 两种编译工具不要混用，只会增加工程的复杂度
+
+# 代码检查工具
+
+## TypeScript 转向 ESLint 的原因：
+
+- `TSLint` 执行规则的方式存在一些架构问题，从而影响了性能，修复这些问题会有破坏现有规则
+- `Eslint` 性能更好，并且社区用户通常拥有 `ESLint` 的规则配置（比如针对 `React` 或 `Vue` 的规则），而不会拥有 `TSLint` 的规则
+
+`TypeScript` 和 `ESLint` 在编译过程中转换的 `AST` 不兼容，需要 `typescript-eslint` 将 `TypeScript` 的 `AST` 转换成 `ESTree` 与 `ESLint` 的 `AST` 做兼容。
+
+## 使用了 TypeScript，为什么还需要使用 ESLint？
+
+`TypeScript` 的工作包含了类型检查、语言转换、语法错误检查，`ESLint` 在语法错误检查的基础上可以保证代码风格的统一。
+
+## 常用包
+
+- `@typescript-eslint/eslint-plugin`: 使 `ESLint` 识别 `TS` 一些特殊语法
+- `@typescript-eslint/parser`: 为 `ESLint` 提供解析器
+
+**`ESLint` 配置 `.eslintrc.json`：**
+
+```json
+{
+  "parser": "@typescript-eslint/parser",
+  "plugin": ["@typescript-eslint"],
+  "parserOptions": {
+    "project": "./tsconfig.json"
+  },
+  "extends": [
+    "plugin:@typescript-eslint/recommended"
+  ],
+  "rules": {
+    "@typescript-eslint/no-inferrable-types": "off"
+  }
+}
+```
+
+**`package.json` 命令：**
+
+```json
+{
+  "scripts": {
+    "lint": "eslint src --ext .js,.ts"
+  }
+}
+```
+
+## babel-eslint 和 typescript-eslint
+
+- `babel-eslint`: 支持 `TypeScript` 没有的额外的语法检查，抛弃 `TypeScript`，不支持类型检查
+- `typescript-eslint`: 基于 `TypeScript` 的 `AST`，支持创建基于类型信息的规则（`tsconfig.json`）
+
+**建议：**
+
+- 两者底层机制不同，不要一起使用
+- `Babel` 体系建议使用 `babel-eslint`，否则可以使用 `typescript-eslint`
+
+# 单元测试工具
+
+**安装依赖：**
+
+> npm i jest ts-jest -D
+
+**生成配置文件 `jest.config.js`**
+
+> ts-jest config
+
+```js
+module.exports = {
+  preset: 'ts-jest',
+  testEnvironment: 'node'
+}
+```
